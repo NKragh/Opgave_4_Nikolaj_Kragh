@@ -9,6 +9,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Swashbuckle.AspNetCore.Swagger;
 
 namespace Opgave_4_Nikolaj_Kragh
 {
@@ -24,6 +25,8 @@ namespace Opgave_4_Nikolaj_Kragh
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSwaggerGen(x => x.SwaggerDoc("v1", new Info { Title = "Books API", Version = "v1.0" }));
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 
@@ -34,6 +37,13 @@ namespace Opgave_4_Nikolaj_Kragh
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseSwagger();
+            app.UseSwaggerUI(x =>
+            {
+                x.SwaggerEndpoint("/swagger/v1/swagger.json", "Books API v1.0");
+                x.RoutePrefix = "api/Help";;
+            });
 
             app.UseMvc();
         }
